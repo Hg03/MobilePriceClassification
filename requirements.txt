@@ -20,7 +20,6 @@ colorama==0.4.4
 commonmark==0.9.1
 dbus-python==1.2.18
 decorator==4.4.2
-defer==1.0.6
 Django==4.1.4
 entrypoints==0.4
 fastjsonschema==2.15.3
