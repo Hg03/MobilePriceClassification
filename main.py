@@ -43,6 +43,17 @@ preprocess = FunctionTransformer(preprocess_text)
 
 
 def mobilepriceclassification():
+    page_bg_img = f"""
+      <style>
+          [data-testid="stAppViewContainer"] > .main {{
+          background-image: url("https://images.unsplash.com/photo-1501426026826-31c667bdf23d");
+          background-size: 180%;
+          background-position: top left;
+          background-repeat: no-repeat;
+          background-attachment: local;
+       }}
+     </style>
+    """
     st.title('Mobile Price Classification')
     df = pd.read_csv('data/mobilepriceclassification/train.csv')
     csv = convert_df(df)
