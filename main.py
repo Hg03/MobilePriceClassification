@@ -1,9 +1,15 @@
 import streamlit as st
+import spacy
 import pandas as pd
 import pickle
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import FunctionTransformer
+from sklearn.naive_bayes import MultinomialNB, GaussianNB
+from sklearn.pipeline import make_pipeline
+from sklearn.metrics import accuracy_score
+from sklearn.feature_extraction.text import CountVectorizer
 
-df = pd.read_csv('train.csv')
-columns = list(df.columns)
+
 oneto8 = [1,2,3,4,5,6,7,8]
 onetotwenty = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]
 
@@ -20,11 +26,25 @@ st.markdown(hide_streamlit_style, unsafe_allow_html=True)
 def convert_df(df):
     return df.to_csv().encode('utf-8')
 
+def preprocess_text(feature):
+#   Initializing spacy pipeline
+    nlp = spacy.load('en_core_web_sm') 
+    lemmatized = []
+    final = []
+    for i in range(len(feature)):
+        lemmatized.append([token.lemma_ for token in nlp(feature.iloc[i].lower()) if token.is_stop == False and token.text.isalpha() == True])
+        
+    for i in range(len(lemmatized)):
+        final.append(" ".join(lemmatized[i]))
+        
+    return final
+preprocess = FunctionTransformer(preprocess_text)
+
 
 
 def mobilepriceclassification():
     st.title('Mobile Price Classification')
-    df = pd.read_csv('train.csv')
+    df = pd.read_csv('data/mobilepriceclassification/train.csv')
     csv = convert_df(df)
 
     st.download_button(label="Download data as CSV", data=csv, file_name='train.csv', mime='text/csv',)
@@ -64,7 +84,24 @@ def mobilepriceclassification():
 
 
 def fakenewsclassifier():
+
+    model = pickle.load(open('fake_news_estimator.sav','rb'))
     st.title('Fake News Classifier')
+    df1 = pd.read_csv('data/fakenewsclassification/FakeNewsNet.csv')
+    csv1 = convert_df(df1)
+    st.download_button(label="Download data as CSV", data=csv1, file_name='train.csv', mime='text/csv',)
+
+    input_text = st.text_area('Type your rumoured news',placeholder='Enter some valid news')
+    
+    submit = st.button(label = 'Is it fake or not ??')
+    if submit and input_text == '':
+        st.info('Please fill the field with some text')
+    elif submit and input_text != '':
+        result = model.predict(pd.Series([input_text]))[0]
+        if(result == 0):
+            st.warning('According to the data and model trained, it is considered as fake news, please go through some articles to verify it.')
+        else:    
+            st.info('According to the data and model trained, it is considered as genuine news, please go through some articles to confirm it for safety purpose.')
 
 def aboutme():
     st.title("Hii, What's Up")
