@@ -104,8 +104,34 @@ def fakenewsclassifier():
             st.info('According to the data and model trained, it is considered as genuine news, please go through some articles to confirm it for safety purpose.')
 
 def aboutme():
-    st.title("Hii, What's Up")
-
+    table = '''
+                |Education|College/School|CGPA/% Secured|
+                |---------|--------------|--------------|
+                |B.Tech (Computer Science)|Shri Vaishnav Vidyapeeth Vishwavidyalaya|7.8 CGPA|
+                |Higher Secondary Education (12th)|Angel Hearts Academy|88%|
+                |Secondary Education (10th)|Angel Hearts Academy|81.8%|
+            '''    
+    st.title("Hii, What's Up 👋")
+    st.markdown("## My name is Harish Gehlot ")
+    st.markdown('🖊️ Data Science and Machine Learning Practitioner')
+   
+    with st.expander("🏫 Educational Background"):
+        st.markdown(table)
+    with st.expander("🔗 Links"):
+        st.markdown(' ⇢ [Github](https://github.com/Hg03)')
+        st.markdown(' ⇢ [LinkedIn](https://www.linkedin.com/in/harish-gehlot-5338a021a/)')
+        st.markdown(' ⇢ [My Blog](https://hashcodenotes.hashnode.dev)')
+        st.markdown(' ⇢ [Leetcode](https://leetcode.com/HarishG03/)')
+    with st.expander("🧾 Certifications"):
+        st.markdown(' ⇢ [Data Analysis with Python](https://www.freecodecamp.org/certification/penny03/data-analysis-with-python-v7)')
+        st.markdown(' ⇢ [Machine Learning with Python](https://www.freecodecamp.org/certification/penny03/machine-learning-with-python-v7)')
+    with open("HarishGehlotUpdated.pdf", "rb") as file:
+        btn=st.download_button(
+        label="Look on my CV",
+        data=file,
+        file_name="resume.pdf",
+        mime="application/octet-stream"
+)
 
 page_names_to_funcs = {
     "About Me":aboutme,
