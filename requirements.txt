@@ -5,5 +5,5 @@ sklearn==0.0
 streamlit==1.13.0
 virtualenv==20.16.5
 xgboost==1.6.2
-spacy==3.2
+spacy==3.5
 ./en_core_web_sm-3.4.1.tar.gz
