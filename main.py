@@ -109,7 +109,7 @@ def sentimentclassifier():
     st.title('Sentiment Analysis & Prediction')
     df2 = pd.read_csv('data/sentimentclassification/train.csv')
     csv2 = convert_df(df2)
-    st.download_button(label="Download data as CSV",data=csv2,file_name="train.csv",mime="text/csv")
+    st.download_button(label="Download data as CSV",data=csv2,file_name="test.csv",mime="text/csv")
     
     input_text = st.text_area('Type your sentiment',placeholder="Type some text related to above mentioned topics")
     submit = st.button(label="Identify the topic")
