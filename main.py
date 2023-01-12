@@ -103,6 +103,23 @@ def fakenewsclassifier():
         else:    
             st.info('According to the data and model trained, it is considered as genuine news, please go through some articles to confirm it for safety purpose.')
 
+def sentimentclassifier():
+    model = pickle.load(open('sentimentestimator.sav','rb'))
+    topics = {0:'world',1:'Sports',2:'Business',3:'Sci/Tech'}
+    st.title('Sentiment Analysis & Prediction')
+    df2 = pd.read_csv('data/sentimentclassification/train.csv')
+    csv2 = convert_df(df2)
+    st.download_button(label="Download data as CSV",data=csv2,file_name="train.csv",mime="text/csv")
+    
+    input_text = st.text_area('Type your sentiment',placeholder="Type some text related to above mentioned topics")
+    submit = st.button(label="Identify the topic")
+    if submit and input_text == '':
+        st.info('Please fill the field with some text')
+    elif submit and input_text != '':
+        result = model.predict(pd.Series([input_text]))[0]
+        st.warning(f'Your sentiment is related to the topic of {topics[result]}')
+            
+            
 def aboutme():
     table = '''
                 |Education|College/School|CGPA/% Secured|
@@ -138,6 +155,7 @@ page_names_to_funcs = {
     "About Me":aboutme,
     "Mobile Price Classification": mobilepriceclassification,
     "Fake News Classifier": fakenewsclassifier,
+    "Sentiment Analysis": sentimentclassifier
 }
 st.sidebar.title('Projects')
 project = st.sidebar.selectbox('List',page_names_to_funcs.keys())
