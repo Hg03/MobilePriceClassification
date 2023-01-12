@@ -107,7 +107,7 @@ def sentimentclassifier():
     model = pickle.load(open('sentimentestimator.sav','rb'))
     topics = {0:'world',1:'Sports',2:'Business',3:'Sci/Tech'}
     st.title('Sentiment Analysis & Prediction')
-    df2 = pd.read_csv('data/sentimentclassification/train.csv')
+    df2 = pd.read_csv('data/sentimentclassification/test.csv')
     csv2 = convert_df(df2)
     st.download_button(label="Download data as CSV",data=csv2,file_name="test.csv",mime="text/csv")
     
