@@ -55,7 +55,7 @@ def mobilepriceclassification():
     st.title('Mobile Price Classification')
     df = pd.read_csv('data/mobilepriceclassification/train.csv')
     csv = convert_df(df)
-
+    st.info("This model only predicts the range of mobile price like 0, 1, 2.")
     st.download_button(label="Download data as CSV", data=csv, file_name='train.csv', mime='text/csv',)
 
     with st.container():
@@ -98,6 +98,7 @@ def fakenewsclassifier():
     st.title('Fake News Classifier')
     df1 = pd.read_csv('data/fakenewsclassification/FakeNewsNet.csv')
     csv1 = convert_df(df1)
+    st.markdown("It is a NLP model used to classify the news is fake or not. Dataset is extracted from [here](https://www.kaggle.com/datasets/algord/fake-news)")
     st.download_button(label="Download data as CSV", data=csv1, file_name='train.csv', mime='text/csv',)
 
     input_text = st.text_area('Type your rumoured news',placeholder='Enter some valid news')
@@ -118,6 +119,7 @@ def sentimentclassifier():
     st.title('Sentiment Analysis & Prediction')
     df2 = pd.read_csv('data/sentimentclassification/test.csv')
     csv2 = convert_df(df2)
+    st.markdown("Dataset is extracted from [huggingface](https://huggingface.co/datasets/ag_news), and it classifies the topics i.e. **world**, **sci/tech**, **business** and **sports**. You can download the dataset below.")
     st.download_button(label="Download data as CSV",data=csv2,file_name="test.csv",mime="text/csv")
     
     input_text = st.text_area('Type your sentiment',placeholder="Type some text related to above mentioned topics")
