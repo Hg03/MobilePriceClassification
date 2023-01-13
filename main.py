@@ -38,8 +38,10 @@ def preprocess_text(feature):
         final.append(" ".join(lemmatized[i]))
         
     return final
-preprocess = FunctionTransformer(preprocess_text)
 
+
+preprocess = FunctionTransformer(preprocess_text)
+preprocess_sentiment = FunctionTransformer(preprocess_text1)
 
 
 def mobilepriceclassification():
