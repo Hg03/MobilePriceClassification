@@ -1,6 +1,7 @@
 import streamlit as st
 import spacy
 import re
+from nltk import stem, corpus, tokenize
 import nltk
 import pandas as pd
 import pickle
