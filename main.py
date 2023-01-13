@@ -1,5 +1,7 @@
 import streamlit as st
 import spacy
+import re
+import nltk
 import pandas as pd
 import pickle
 from sklearn.model_selection import train_test_split
@@ -39,6 +41,11 @@ def preprocess_text(feature):
         
     return final
 
+def preprocess_text1(corpus):
+    lemmatizer = stem.WordNetLemmatizer()
+    stopword = nltk.corpus.stopwords.words('english')
+    preprocessed = corpus.apply(lambda x: " ".join([lemmatizer.lemmatize(i) for i in re.sub("[^a-zA-Z]", " ", x).split() if i not in stopword]).lower())
+    return preprocessed
 
 preprocess = FunctionTransformer(preprocess_text)
 preprocess_sentiment = FunctionTransformer(preprocess_text1)
