@@ -134,6 +134,42 @@ def sentimentclassifier():
         result = model.predict(pd.Series([input_text]))[0]
         st.warning(f'Your sentiment is related to the topic of {topics[result]}')
             
+def pipegen():
+    st.title('Pipeline Generator')
+    st.success("Just upload your dataset, pipeline for preprocessing whole dataset is provided in a pythonic code")
+    file = st.file_uploader('Upload your csv file',type=['csv'])
+    if file:
+        data = pd.read_csv(file)
+        cols_with_blank = list(data.columns)
+        cols_with_blank.insert(0,'Browse the features')
+        target_column = st.selectbox('Can you please specify the target feature',cols_with_blank)
+        if target_column != 'Browse the features':
+            target_data = data[target_column]
+            data = data.drop(target_column,axis=1)
+            missing_values = data.isnull().sum().sum()
+            categorical = [cols for cols in data.columns if data[cols].dtype == 'O']
+            numerical = [cols for cols in data.columns if cols not in categorical]
+            if target_data.nunique() < 5:
+                st.warning('Your target feature has very less features, therefore it is classification problem')
+            else:
+                st.warning('Your target feature has more features, therefore it is regression problem')
+            with st.expander(f'Total number of missing values are {data.isnull().sum().sum()}'):
+                missings = [data[val].isnull().sum().sum() for val in data.columns]
+                table1 = pd.DataFrame({'Features':list(data.columns),'Number of missing values':missings})
+                st.table(table1)
+            with st.expander(f'Total number of Categorical Features are {len(categorical)}'):
+                st.table(categorical)
+            with st.expander(f'Total number of numerical Features are {len(numerical)}'):
+                st.table(numerical)
+            
+            st.markdown('## Now what do you want to do about your data')
+            if target_data.nunique() < 5:
+                steps = st.multiselect('Preprocessing Steps',['Impute Missing Values','Encode Categorical Features','Select the essential features'])
+                
+            else:
+                steps = st.multiselect('Preprocessing Steps',['Impute Missing Values','Encode Categorical Features','Normalize the features','Select the essential features'])
+
+            
             
 def aboutme():
     table = '''
@@ -167,6 +203,7 @@ def aboutme():
 )
 
 page_names_to_funcs = {
+    "Pipeline Generator":pipegen,        
     "About Me":aboutme,
     "Mobile Price Classification": mobilepriceclassification,
     "Fake News Classifier": fakenewsclassifier,
