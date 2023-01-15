@@ -97,7 +97,7 @@ def mobilepriceclassification():
             submit = st.form_submit_button('Predict the range of price')
 
         if(submit and '' not in input):
-            model = pickle.load(open('../estimators/final_estimator.sav','rb'))
+            model = pickle.load(open('estimators/final_estimator.sav','rb'))
             ans = model.predict([input])[0]
             st.info(f'{ans} is the price range of a mobile')
         else:
@@ -106,7 +106,7 @@ def mobilepriceclassification():
 
 def fakenewsclassifier():
 
-    model = pickle.load(open('../estimators/fake_news_estimator.sav','rb'))
+    model = pickle.load(open('estimators/fake_news_estimator.sav','rb'))
     st.title('Fake News Classifier')
     df1 = pd.read_csv('data/fakenewsclassification/FakeNewsNet.csv')
     csv1 = convert_df(df1)
@@ -126,7 +126,7 @@ def fakenewsclassifier():
             st.info('According to the data and model trained, it is considered as genuine news, please go through some articles to confirm it for safety purpose.')
 
 def sentimentclassifier():
-    model = pickle.load(open('../estimators/sentimentestimator.sav','rb'))
+    model = pickle.load(open('estimators/sentimentestimator.sav','rb'))
     topics = {0:'world',1:'Sports',2:'Business',3:'Sci/Tech'}
     st.title('Sentiment Analysis & Prediction')
     df2 = pd.read_csv('data/sentimentclassification/test.csv')
