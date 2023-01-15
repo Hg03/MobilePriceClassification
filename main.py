@@ -169,6 +169,85 @@ def pipegen():
             else:
                 steps = st.multiselect('Preprocessing Steps',['Impute Missing Values','Encode Categorical Features','Normalize the features','Select the essential features'])
 
+            steps_with_options = {'Impute Missing Values':['mean','median'],'Encode Categorical Features':['OneHotEncoding','LabelEncoding'],'Select the essential features':list(range(1,len(data.columns)+1)),'Normalize the features':['StandardScaler','normalize']}
+            option_selected = {'Impute Missing Values':None,'Encode Categorical Features':None,'Select the essential features':None,'Normalize the features':None}
+            for i in range(len(steps)):
+                option_selected[steps[i]] = st.selectbox(steps[i],steps_with_options[steps[i]])
+            generate = st.button('Generate the code for your preprocessing pipeline')
+
+            # Selected all
+            if option_selected['Impute Missing Values'] and option_selected['Encode Categorical Features'] and option_selected['Select the essential features'] and option_selected['Normalize the features']: 
+                imports = 'from sklearn import preprocessing, impute, feature_selection'
+                pipeline = f"""imputer = impute(strategy='{option_selected['Impute Missing Values']}')\nencoder = preprocessing.{option_selected['Encode Categorical Features']}()\nselector = preprocessing.feature_selection(preprocessing.feature_selection.chi2,k={option_selected['Select the essential features']})\nstandardize = preprocessing.{option_selected['Normalize the features']}()\ntransformer_1 = make_column_transformer((imputer,[feed the numerical columns here]),(encoder,[feed the categorical columns here],remainder='passthrough'))\ntransformer_2 = make_column_transformer(standardize,[feed the numerical columns here],remainder='passthrough) # After first transformation, place of all features got disarranged, so find the column number of numerical feature and feed in transformer_2\nfinal_pipeline = make_pipeline(transformer_1,transformer_2,selector)\n# Now pass your training data in fit function in final_pipeline\n #Transform your data using transform function"""
+            elif not option_selected['Impute Missing Values'] and not option_selected['Encode Categorical Features'] and not option_selected['Select the essential features'] and not option_selected['Normalize the features']:
+                imports = '# Pipeline is Empty, fill with some preprocessing steps'
+                st.warning('Fill some steps to build the pipeline')
+                pipeline = """"""
+            # 3's are selected
+            elif not option_selected['Impute Missing Values'] and option_selected['Encode Categorical Features'] and option_selected['Select the essential features'] and option_selected['Normalize the features']:
+                imports = 'from sklearn import preprocessing, feature_selection'
+                pipeline = f"""encoder = preprocessing.{option_selected['Encode Categorical Features']}()\nselector = preprocessing.feature_selection(preprocessing.feature_selection.chi2,k={option_selected['Select the essential features']})\nstandardize = preprocessing.{option_selected['Normalize the features']}()\ntransformer_1 = make_column_transformer((standardize,[feed the numerical columns here]),(encoder,[feed the categorical columns here],remainder='passthrough'))\nfinal_pipeline = make_pipeline(transformer_1,selector)\n# Now pass your training data in fit function in final_pipeline\n #Transform your data using transform function"""
+
+            elif option_selected['Impute Missing Values'] and not option_selected['Encode Categorical Features'] and option_selected['Select the essential features'] and option_selected['Normalize the features']:
+                imports = 'from sklearn import impute, feature_selection'
+                pipeline = f"""imputer = impute(strategy='{option_selected['Impute Missing Values']}')\nselector = preprocessing.feature_selection(preprocessing.feature_selection.chi2,k={option_selected['Select the essential features']})\nstandardize = preprocessing.{option_selected['Normalize the features']}()\ntransformer_1 = make_column_transformer((imputer,[feed the numerical columns here]),remainder='passthrough'))\ntransformer_2 = make_column_transformer(standardize,[feed the numerical columns here]) # After first transformation, place of all features got disarranged, so find the column number of numerical feature and feed in transformer_2 \nfinal_pipeline = make_pipeline(transformer_1,transformer_2,selector)\n# Now pass your training data in fit function in final_pipeline\n #Transform your data using transform function"""
+
+            elif option_selected['Impute Missing Values'] and option_selected['Encode Categorical Features'] and not option_selected['Select the essential features'] and option_selected['Normalize the features']:
+                imports = 'from sklearn import preprocessing, impute'
+                pipeline = f"""imputer = impute(strategy='{option_selected['Impute Missing Values']}')\nencoder = preprocessing.{option_selected['Encode Categorical Features']}()\nstandardize = preprocessing.{option_selected['Normalize the features']}()\ntransformer_1 = make_column_transformer((imputer,[feed the numerical columns here]),(encoder,[feed the categorical columns here],remainder='passthrough'))\ntransformer_2 = make_column_transformer(standardize,[feed the numerical columns here],remainder='passthrough) # After first transformation, place of all features got disarranged, so find the column number of numerical feature and feed in transformer_2\nfinal_pipeline = make_pipeline(transformer_1,transformer_2)\n# Now pass your training data in fit function in final_pipeline\n #Transform your data using transform function"""
+
+            elif option_selected['Impute Missing Values'] and option_selected['Encode Categorical Features'] and not option_selected['Select the essential features'] and not option_selected['Normalize the features']:
+                imports = 'from sklearn import preprocessing, impute, feature_selection'
+                pipeline = f"""imputer = impute(strategy='{option_selected['Impute Missing Values']}')\nencoder = preprocessing.{option_selected['Encode Categorical Features']}()\ntransformer_1 = make_column_transformer((imputer,[feed the numerical columns here]),(encoder,[feed the categorical columns here],remainder='passthrough'))\nfinal_pipeline = make_pipeline(transformer_1,transformer_2)\n# Now pass your training data in fit function in final_pipeline\n #Transform your data using transform function"""
+
+            elif option_selected['Impute Missing Values'] and option_selected['Encode Categorical Features'] and option_selected['Select the essential features'] and not option_selected['Normalize the features']:
+                imports = 'from sklearn import preprocessing, impute, feature_selection'
+                pipeline = f"""imputer = impute(strategy='{option_selected['Impute Missing Values']}')\nencoder = preprocessing.{option_selected['Encode Categorical Features']}()\nselector = preprocessing.feature_selection(preprocessing.feature_selection.chi2,k={option_selected['Select the essential features']})\ntransformer_1 = make_column_transformer((imputer,[feed the numerical columns here]),(encoder,[feed the categorical columns here],remainder='passthrough'))\nfinal_pipeline = make_pipeline(transformer_1,selector)\n# Now pass your training data in fit function in final_pipeline\n #Transform your data using transform function"""
+
+            # 2's are selected
+            elif (option_selected['Impute Missing Values'] and option_selected['Encode Categorical Features'] and not option_selected['Select the essential features'] and not option_selected['Normalize the features']) or (option_selected['Impute Missing Values'] and not option_selected['Encode Categorical Features'] and not option_selected['Select the essential features'] and option_selected['Normalize the features']):
+                imports = 'from sklearn import preprocessing, impute'
+                pipeline = f"""imputer = impute(strategy='{option_selected['Impute Missing Values']}')\nencoder = preprocessing.{option_selected['Encode Categorical Features']}()\ntransformer_1 = make_column_transformer((imputer,[feed the numerical columns here]),(encoder,[feed the categorical columns here],remainder='passthrough'))\nfinal_pipeline = make_pipeline(transformer_1,transformer_2)\n# Now pass your training data in fit function in final_pipeline\n #Transform your data using transform function"""
+
+            elif not option_selected['Impute Missing Values'] and not option_selected['Encode Categorical Features'] and option_selected['Select the essential features'] and option_selected['Normalize the features']:
+                imports = 'from sklearn import preprocessing, feature_selection'
+                pipeline = f"""selector = preprocessing.feature_selection(preprocessing.feature_selection.chi2,k={option_selected['Select the essential features']})\nstandardize = preprocessing.{option_selected['Normalize the features']}()\ntransformer_1 = make_column_transformer(standardize,[feed the numerical columns here],remainder='passthrough)\nfinal_pipeline = make_pipeline(transformer_1,selector)\n# Now pass your training data in fit function in final_pipeline\n #Transform your data using transform function"""
+
+            elif not option_selected['Impute Missing Values'] and option_selected['Encode Categorical Features'] and not option_selected['Select the essential features'] and option_selected['Normalize the features']:
+                imports = 'from sklearn import preprocessing'
+                pipeline = f"""encoder = preprocessing.{option_selected['Encode Categorical Features']}()\nstandardize = preprocessing.{option_selected['Normalize the features']}()\ntransformer_1 = make_column_transformer((standardize,[feed the numerical columns here]),(encoder,[feed the categorical columns here],remainder='passthrough'))\nfinal_pipeline = make_pipeline(transformer_1,transformer_2)\n# Now pass your training data in fit function in final_pipeline\n #Transform your data using transform function"""
+
+            elif option_selected['Impute Missing Values'] and not option_selected['Encode Categorical Features'] and option_selected['Select the essential features'] and not option_selected['Normalize the features']:
+                imports = 'from sklearn import impute, feature_selection'
+                pipeline = f"""imputer = impute(strategy='{option_selected['Impute Missing Values']}')\nselector = preprocessing.feature_selection(preprocessing.feature_selection.chi2,k={option_selected['Select the essential features']})\ntransformer_1 = make_column_transformer((imputer,[feed the numerical columns here]),remainder='passthrough'))\nfinal_pipeline = make_pipeline(transformer_1,selector)\n# Now pass your training data in fit function in final_pipeline\n #Transform your data using transform function"""
+
+            elif not option_selected['Impute Missing Values'] and option_selected['Encode Categorical Features'] and option_selected['Select the essential features'] and not option_selected['Normalize the features']:
+                imports = 'from sklearn import preprocessing, feature_selection'
+                pipeline = f"""encoder = preprocessing.{option_selected['Encode Categorical Features']}()\nselector = preprocessing.feature_selection(preprocessing.feature_selection.chi2,k={option_selected['Select the essential features']})\ntransformer_1 = make_column_transformer((encoder,[feed the categorical columns here]),remainder='passthrough')\nfinal_pipeline = make_pipeline(transformer_1,selector)\n# Now pass your training data in fit function in final_pipeline\n #Transform your data using transform function"""
+
+
+            # Single Selections
+            elif option_selected['Impute Missing Values'] and not option_selected['Encode Categorical Features'] and not option_selected['Select the essential features'] and not option_selected['Normalize the features']:
+                imports = 'from sklearn import impute'
+                pipeline = f"""imputer = impute(strategy='{option_selected['Impute Missing Values']}')\ntransformer = make_column_transformer((imputer,[feed the numerical columns here]),remainder='passthrough')\nfinal_pipeline = make_pipeline(transformer)\n# Now pass your training data in fit function in final_pipeline\n #Transform your data using transform function"""
+
+            elif not option_selected['Impute Missing Values'] and option_selected['Encode Categorical Features'] and not option_selected['Select the essential features'] and not option_selected['Normalize the features']:
+                imports = 'from sklearn import preprocessing'
+                pipeline = f"""encoder = preprocessing.{option_selected['Encode Categorical Features']}()\ntransformer = make_column_transformer((encoder,[feed the categorical columns here]),remainder='passthrough')\nfinal_pipeline = make_pipeline(transformer)\n# Now pass your training data in fit function in final_pipeline\n #Transform your data using transform function"""
+
+            elif not option_selected['Impute Missing Values'] and not option_selected['Encode Categorical Features'] and option_selected['Select the essential features'] and not option_selected['Normalize the features']:
+                imports = 'from sklearn import feature_selection'
+                pipeline = f"""selector = preprocessing.feature_selection(preprocessing.feature_selection.chi2,k={option_selected['Select the essential features']})\nfinal_pipeline = make_pipeline(selector)\n# Now pass your training data in fit function in final_pipeline\n #Transform your data using transform function"""
+
+            elif not option_selected['Impute Missing Values'] and not option_selected['Encode Categorical Features'] and not option_selected['Select the essential features'] and option_selected['Normalize the features']:
+                imports = 'from sklearn import preprocessing'
+                pipeline = f"""standardize = preprocessing.{option_selected['Normalize the features']}()\ntransformer = make_column_transformer((standardize,[feed the numerical columns here]),remainder='passthrough')\nfinal_pipeline = make_pipeline(transformer)\n# Now pass your training data in fit function in final_pipeline\n #Transform your data using transform function"""
+
+            
+            if generate:
+                st.info("Here's your code, enthusiast 🤗")
+                st.code(f"""
+            import pandas as pd\n{imports}\nfrom sklearn.pipeline import make_pipeline\nfrom sklearn.compose import make_column_transformer\n# Points to remember\n# 1. Split your data into training and testing split (Better if you cross validate it)\n# 2. You can visualize it for better understanding\n# 3. Hyperparameter tuning is always mandatory to greater accuracy\nnumerical_features = [col for col in data.columns if data[col].nunique() > 5]\ncategorical_features = [col for col in data.columns if col not in numerical_features]\n{pipeline}""")
             
             
 def aboutme():
