@@ -1,4 +1,6 @@
 import streamlit as st
+from streamlit_lottie import st_lottie
+import requests
 import spacy
 import re
 from nltk import stem, corpus, tokenize
@@ -31,6 +33,12 @@ st.markdown(hide_streamlit_style, unsafe_allow_html=True)
 @st.cache
 def convert_df(df):
     return df.to_csv().encode('utf-8')
+
+def load_lottieurl(url: str):
+    r = requests.get(url)
+    if r.status_code != 200:
+        return None
+    return r.json()
 
 def preprocess_text(feature):
 #   Initializing spacy pipeline
@@ -257,8 +265,13 @@ def aboutme():
                 |B.Tech (Computer Science)|Shri Vaishnav Vidyapeeth Vishwavidyalaya|7.8 CGPA|
                 |Higher Secondary Education (12th)|Angel Hearts Academy|88%|
                 |Secondary Education (10th)|Angel Hearts Academy|81.8%|
-            '''    
-    st.title("Hii, What's Up 👋")
+            ''' 
+    col1, col2 = st.columns(2)  
+    url = 'https://assets4.lottiefiles.com/packages/lf20_yeyxce62.json'
+    url_to_json = load_lottieurl(url) 
+    col1.title("Hii, What's Up")
+    with col2:
+        st_lottie(url_to_json,width=250)
     st.markdown("## My name is Harish Gehlot ")
     st.markdown('🖊️ Data Science and Machine Learning Practitioner')
    
@@ -282,13 +295,18 @@ def aboutme():
 )
 
 page_names_to_funcs = {
-    "Pipeline Generator":pipegen,        
     "About Me":aboutme,
+    "Pipeline Generator":pipegen,        
     "Mobile Price Classification": mobilepriceclassification,
     "Fake News Classifier": fakenewsclassifier,
     "Sentiment Analysis": sentimentclassifier
 }
 st.sidebar.title('Projects')
+lottie_url_hello = "https://assets3.lottiefiles.com/private_files/lf30_mbX0GF.json"
+lottie_hello = load_lottieurl(lottie_url_hello)
+with st.sidebar:
+    st_lottie(lottie_hello, key="hello")
+
 project = st.sidebar.selectbox('List',page_names_to_funcs.keys())
 page_names_to_funcs[project]()
 
