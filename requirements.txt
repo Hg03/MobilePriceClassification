@@ -3,6 +3,7 @@ scikit-learn==1.1.1
 scipy==1.8.0
 sklearn==0.0
 streamlit==1.13.0
+streamlit-lottie==0.0.3
 virtualenv==20.16.5
 xgboost==1.6.2
 nltk>=3.8.1
