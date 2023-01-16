@@ -253,6 +253,8 @@ def pipegen():
 
             
             if generate:
+                with st.spinner('Generating pipeline...'):
+                    time.sleep(8)
                 st.info("Here's your code, enthusiast 🤗")
                 st.code(f"""
             import pandas as pd\n{imports}\nfrom sklearn.pipeline import make_pipeline\nfrom sklearn.compose import make_column_transformer\n# Points to remember\n# 1. Split your data into training and testing split (Better if you cross validate it)\n# 2. You can visualize it for better understanding\n# 3. Hyperparameter tuning is always mandatory to greater accuracy\nnumerical_features = [col for col in data.columns if data[col].nunique() > 5]\ncategorical_features = [col for col in data.columns if col not in numerical_features]\n{pipeline}""")
