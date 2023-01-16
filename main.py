@@ -1,4 +1,5 @@
 import streamlit as st
+import time
 from streamlit_lottie import st_lottie
 import requests
 import spacy
