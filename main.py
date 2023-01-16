@@ -206,7 +206,7 @@ def pipegen():
 
             elif option_selected['Impute Missing Values'] and option_selected['Encode Categorical Features'] and not option_selected['Select the essential features'] and not option_selected['Normalize the features']:
                 imports = 'from sklearn import preprocessing, impute, feature_selection'
-                pipeline = f"""imputer = impute(strategy='{option_selected['Impute Missing Values']}')\nencoder = preprocessing.{option_selected['Encode Categorical Features']}()\ntransformer_1 = make_column_transformer((imputer,[feed the numerical columns here]),(encoder,[feed the categorical columns here],remainder='passthrough'))\nfinal_pipeline = make_pipeline(transformer_1,transformer_2)\n# Now pass your training data in fit function in final_pipeline\n #Transform your data using transform function"""
+                pipeline = f"""imputer = impute(strategy='{option_selected['Impute Missing Values']}')\nencoder = preprocessing.{option_selected['Encode Categorical Features']}()\ntransformer_1 = make_column_transformer((imputer,[feed the numerical columns here]),(encoder,[feed the categorical columns here],remainder='passthrough'))\nfinal_pipeline = make_pipeline(transformer_1)\n# Now pass your training data in fit function in final_pipeline\n #Transform your data using transform function"""
 
             elif option_selected['Impute Missing Values'] and option_selected['Encode Categorical Features'] and option_selected['Select the essential features'] and not option_selected['Normalize the features']:
                 imports = 'from sklearn import preprocessing, impute, feature_selection'
