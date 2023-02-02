@@ -276,8 +276,9 @@ def textFromImage():
         result = reader.readtext(img,detail=0)
         extract = st.button('Extract text from Image')
         if extract:
-            with st.expander('After analyzing the image, following text is extracted'):
-                st.write(result)
+            with st.spinner('Extracting.....'):
+                with st.expander('After analyzing the image, following text is extracted'):
+                    st.write(result)
             
 def aboutme():
     table = '''
