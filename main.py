@@ -274,6 +274,7 @@ def textFromImage():
         extension = name[name.rfind(".")+2:]
         if extension not in ["png","jpg"]:
             st.error('Please upload image having extension of jpg or png')
+            st.write(extension')
         else :
             img = Image.open(img)
             reader = ocr.Reader(['en'])
