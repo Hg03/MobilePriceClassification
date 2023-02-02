@@ -1,6 +1,7 @@
 import streamlit as st
 import time
 from streamlit_lottie import st_lottie
+import easyocr as ocr
 import requests
 import spacy
 import re
@@ -263,7 +264,19 @@ def pipegen():
                 st.info("Here's your code, enthusiast 🤗")
                 st.code(f"""
             import pandas as pd\n{imports}\nfrom sklearn.pipeline import make_pipeline\nfrom sklearn.compose import make_column_transformer\n# Points to remember\n# 1. Split your data into training and testing split (Better if you cross validate it)\n# 2. You can visualize it for better understanding\n# 3. Hyperparameter tuning is always mandatory to greater accuracy\nnumerical_features = [col for col in data.columns if data[col].nunique() > 5]\ncategorical_features = [col for col in data.columns if col not in numerical_features]\n{pipeline}""")
-            
+ 
+def textFromImage():
+    st.title('Text Extraction from Image')
+    img = st.file_uploader(label='Upload an Image which contains any text',type=['png','jpg'])
+    if img is not None:
+        img = Image.open(img)
+        reader = ocr.Reader(['en'])
+        st.image(img,use_column_width=True)
+        result = reader.readtext(img,detail=0)
+        extract = st.button('Extract text from Image')
+        if extract:
+            with st.expander('After analyzing the image, following text is extracted'):
+                st.write(result)
             
 def aboutme():
     table = '''
@@ -303,6 +316,7 @@ def aboutme():
 
 page_names_to_funcs = {
     "About Me":aboutme,
+    "Text Extraction From Image":textFromImage,
     "Pipeline Generator":pipegen,        
     "Mobile Price Classification": mobilepriceclassification,
     "Fake News Classifier": fakenewsclassifier,
