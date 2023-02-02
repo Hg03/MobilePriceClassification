@@ -5,6 +5,7 @@ import easyocr as ocr
 import requests
 import spacy
 import re
+from PIL import Image
 from nltk import stem, corpus, tokenize
 import nltk
 import pandas as pd
