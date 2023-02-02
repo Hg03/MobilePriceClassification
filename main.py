@@ -273,10 +273,10 @@ def textFromImage():
         img = Image.open(img)
         reader = ocr.Reader(['en'])
         st.image(img,use_column_width=True)
-        result = reader.readtext(img,detail=0)
         extract = st.button('Extract text from Image')
         if extract:
             with st.spinner('Extracting.....'):
+                result = reader.readtext(img,detail=0)
                 with st.expander('After analyzing the image, following text is extracted'):
                     st.write(result)
             
