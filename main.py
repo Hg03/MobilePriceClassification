@@ -271,7 +271,7 @@ def textFromImage():
     img = st.file_uploader(label='Upload an Image which contains any text',type=['png','jpg'])
     if img is not None:
         name = img.name
-        extension = name[name.rfind(".")+2:]
+        extension = name[name.rfind(".")+1:]
         if extension not in ["png","jpg"]:
             st.error('Please upload image having extension of jpg or png')
             st.write(extension)
