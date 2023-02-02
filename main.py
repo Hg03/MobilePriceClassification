@@ -270,15 +270,20 @@ def textFromImage():
     st.title('Text Extraction from Image')
     img = st.file_uploader(label='Upload an Image which contains any text',type=['png','jpg'])
     if img is not None:
-        img = Image.open(img)
-        reader = ocr.Reader(['en'])
-        st.image(img,use_column_width=True)
-        extract = st.button('Extract text from Image')
-        if extract:
-            with st.spinner('Extracting.....'):
-                result = reader.readtext(img,detail=0)
-                with st.expander('After analyzing the image, following text is extracted'):
-                    st.write(result)
+        name = img.name
+        extension = name[name.rfind(".")+2:]
+        if extension not in ["png","jpg"]:
+            st.error('Please upload image having extension of jpg or png')
+        else :
+            img = Image.open(img)
+            reader = ocr.Reader(['en'])
+            st.image(img,use_column_width=True)
+            extract = st.button('Extract text from Image')
+            if extract:
+                with st.spinner('Extracting.....'):
+                    result = reader.readtext(img,detail=0)
+                    with st.expander('After analyzing the image, following text is extracted'):
+                        st.write(result)
             
 def aboutme():
     table = '''
