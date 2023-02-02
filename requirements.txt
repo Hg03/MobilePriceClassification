@@ -9,4 +9,5 @@ xgboost==1.6.2
 nltk>=3.8.1
 spacy>=3.4.0
 easyocr>=1.6.2
+PIL>=9.4.0
 ./en_core_web_sm-3.4.1.tar.gz
